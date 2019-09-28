@@ -9,6 +9,13 @@ public class Class {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String className;
+    private long createdAt;
+    private long updatedAt;
+    private int status;
+
+    public Class() {
+        this.status = 1;
+    }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade =
             {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
@@ -39,5 +46,29 @@ public class Class {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public long getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(long updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
