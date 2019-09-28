@@ -24,16 +24,18 @@ public class StudentServiceImplement implements StudentService{
     }
 
     @Override
-    public Student getDetail(String email) {
-        return studentRepository.findById(email).orElse(null);
+    public Student findByEmail(String email){
+        Optional<Student> optionalStudent = studentRepository.findByEmail(email);
+        return optionalStudent.orElse(null);
     }
+
 
     @Override
     public Student login(String email, String password) {
-        Optional<Student> optionalStudent = studentRepository.findById(email);
+        Optional<Student> optionalStudent = studentRepository.findByEmail(email);
         if (optionalStudent.isPresent()) {
             Student student = optionalStudent.get();
-            if (student.getPassword().equals(password)) {
+            if (student.getPassword().equals(passwordEncoder.encode(password))) {
                 return student;
             }
         }
@@ -51,7 +53,7 @@ public class StudentServiceImplement implements StudentService{
 
     @Override
     public Student update(String email, Student updateStudent) {
-        Optional<Student> optionalStudent = studentRepository.findById(email);
+        Optional<Student> optionalStudent = studentRepository.findByEmail(email);
         if (optionalStudent.isPresent()) {
             Student existstudent = optionalStudent.get();
             existstudent.setName(updateStudent.getName());
@@ -64,7 +66,9 @@ public class StudentServiceImplement implements StudentService{
     }
 
     @Override
-    public Student getById(String email) {
-        return studentRepository.findById(email).orElse(null);
+    public Student findById(int studentId) {
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        return optionalStudent.orElse(null);
     }
+
 }

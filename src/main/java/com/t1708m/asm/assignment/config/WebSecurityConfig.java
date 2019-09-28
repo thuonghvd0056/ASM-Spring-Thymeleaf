@@ -19,29 +19,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-//        return new PasswordEncoder() {
-//            @Override
-//            public String encode(CharSequence charSequence) {
-//                return null;
-//            }
-//
-//            @Override
-//            public boolean matches(CharSequence charSequence, String s) {
-//                return false;
-//            }
-//        };
     }
 
     @Bean
     protected UserDetailsService userDetailsService() {
-//        UserDetails user =
-//                User.withDefaultPasswordEncoder()
-//                        .username("user")
-//                        .password("password")
-//                        .roles("USER")
-//                        .build();
-//        return new InMemoryUserDetailsManager(user);
         return new MyUserDetailService();
+    }
+
+    @Bean
+    AuthenticationFailureHandler authenticationFailureHandler() {
+        return new MyAuthenticationFailureHandler();
     }
 
     @Override
@@ -53,16 +40,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeRequests()
-                .antMatchers("/student/*").hasAnyRole()
+                .antMatchers("/students/create").permitAll()
+                .and()
+                .authorizeRequests()
+                .antMatchers("/students**").permitAll()
+                .antMatchers("/students/**").hasAnyRole(String.format("%s", "User"))
                 .and()
                 .formLogin()
                 .loginPage("/students/login")
+                .defaultSuccessUrl("/students/detail")
                 .permitAll()
-                .failureUrl("/students/login?error")
+                .failureHandler(authenticationFailureHandler())
                 .and()
                 .logout()
-                .permitAll()
-                .and()
-                .exceptionHandling();
+                .permitAll();
     }
 }

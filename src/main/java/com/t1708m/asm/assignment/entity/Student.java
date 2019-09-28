@@ -2,6 +2,7 @@ package com.t1708m.asm.assignment.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -9,12 +10,15 @@ import java.util.Set;
 @Entity
 public class Student {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     @Email(message = "Email không đúng định dạng.")
     private String email;
-    @NotNull(message = "Vui lòng nhập tên.")
+    @NotBlank(message = "Vui lòng nhập tên.")
     private String name;
+    @NotBlank(message = "Vui lòng nhập password.")
     private String password;
-    @Size(min = 7, message = "Tối thiểu 7 kí tự.")
+    @Size(min = 7, max= 7, message = "Mã sinh viên gồm 7 kí tự..")
     private String rollNumber;
     private long createdAt;
     private long updatedAt;

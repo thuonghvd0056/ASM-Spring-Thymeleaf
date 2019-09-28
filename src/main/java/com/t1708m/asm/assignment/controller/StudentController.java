@@ -3,6 +3,7 @@ package com.t1708m.asm.assignment.controller;
 import com.t1708m.asm.assignment.entity.Student;
 import com.t1708m.asm.assignment.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,16 +18,17 @@ public class StudentController {
     @Autowired
     StudentService studentService;
 
+    @RequestMapping(method = RequestMethod.GET, value = "/detail")
+    public String showStudentDetail(Model model, Authentication authentication){
+        model.addAttribute("student", studentService.findByEmail(authentication.getName()));
+        return "detail";
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/login")
     public String showLoginPage() {
         return "login";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/list")
-    public String showListStudent(Model model) {
-        model.addAttribute("list", studentService.getList(1, 10));
-        return "list";
-    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/create")
     public String createAccount(Model model) {
@@ -40,6 +42,6 @@ public class StudentController {
             return "form";
         }
         studentService.register(student);
-        return "success";
+        return "redirect:/students/login";
     }
 }

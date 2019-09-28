@@ -16,13 +16,14 @@ public class MyUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Student student = studentService.getById(email);
+        Student student = studentService.findByEmail(email);
         if (student == null) {
             throw new UsernameNotFoundException("User not found");
         }
         return User.builder()
                 .username(student.getEmail())
                 .password(student.getPassword())
+                .roles("User")
                 .build();
     }
 }

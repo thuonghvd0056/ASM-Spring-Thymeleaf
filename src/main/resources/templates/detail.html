@@ -7,7 +7,7 @@
 <body>
     <h1>Hello student</h1>
     <ul>
-        <li th:each="student : ${list}">
+        <li>
             <span th:text="${student.rollNumber} + ' - ' + ${student.name} + ' - ' + ${student.email}"></span>
         </li>
     </ul>
